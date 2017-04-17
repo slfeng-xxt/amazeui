@@ -1,0 +1,54 @@
+// Copyright 2017-present Palantir Technologies, Inc. All rights reserved.
+// Licensed under the BSD-3 License as modified (the “License”); you may obtain a copy
+// of the license at https://github.com/palantir/blueprint/blob/master/LICENSE
+// and https://github.com/palantir/blueprint/blob/master/PATENTS
+
+// Base Styles for All Examples
+
+.docs-react-example,
+.docs-react-example-row,
+.docs-react-options, {
+  display: flex;
+  flex-direction: row;
+}
+
+.docs-react-options {
+  margin-top: $options-margin;
+  text-align: left;
+
+  // hide when empty (div is always rendered)
+  &:empty {
+    display: none;
+  }
+}
+
+.docs-react-example-column,
+.docs-react-options-column {
+  margin-right: $options-margin * 2;
+
+  &:last-child {
+    margin: 0;
+  }
+}
+
+.docs-react-options-column {
+  flex: 0 0 $options-width;
+
+  .pt-control:not(.pt-inline) {
+    margin-right: 0;
+  }
+}
+
+.docs-react-example-column {
+  flex: 0 0 auto;
+}
+
+.docs-inline-example {
+  display: inline-block;
+  margin-right: $options-margin * 2;
+  vertical-align: top;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
