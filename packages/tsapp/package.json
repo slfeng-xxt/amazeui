@@ -1,0 +1,19 @@
+{
+  "name": "tsapp",
+  "version": "1.0.0",
+  "entry": {
+    "index": "./src/index.ts"
+  },
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "roadhog server",
+    "build": "roadhog build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "roadhog": "^0.5.3"
+  }
+}
