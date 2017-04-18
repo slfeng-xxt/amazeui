@@ -7,6 +7,7 @@ import {
   Icon,
   Row,
   Col,
+  Button,
 } from '../components'
 import 'antd/dist/antd.css'
 import styles from './app.less'
@@ -14,7 +15,7 @@ import styles from './app.less'
 function App ({ children, location, dispatch, app, loading }) {
   return (
     <div className={styles.normal}>
-      <Icon type="link" />链接
+      <Button type="primary"><Icon type="link" />点击链接</Button>
       <Row>This is a row</Row>
       <Row>
         <Col span={12}>这是一个Col</Col>
