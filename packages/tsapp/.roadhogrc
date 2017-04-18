@@ -12,7 +12,7 @@
     "production": {
       "extraBabelPlugins": [
         "transform-runtime",
-        ["import", { "libraryName": "antd", "style": "css" }]
+        ["import", { "libraryName": "antd", "style": "css" }] // 加入这一条，import antd的样式的时候才不会被md5
       ]
     }
   },
