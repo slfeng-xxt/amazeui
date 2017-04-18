@@ -1,9 +1,6 @@
 {
   "name": "tsapp",
   "version": "1.0.0",
-  "entry": {
-    "index": "./src/index.ts"
-  },
   "description": "",
   "main": "index.js",
   "scripts": {
