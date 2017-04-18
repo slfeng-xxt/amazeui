@@ -1,7 +1,7 @@
 {
-  "entry": "src/index.tsx",
-//  "publicPath": "/dist/",
-//  "outputPath": "./dist",
+  "entry": "src/index.js",
+  "publicPath": "/dist/",
+  "outputPath": "./dist",
   "env": {
     "development": {
       "extraBabelPlugins": [
