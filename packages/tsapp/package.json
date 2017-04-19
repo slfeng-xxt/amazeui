@@ -35,9 +35,12 @@
     "classnames": "^2.2.5",
     "dva": "^1.2.1",
     "dva-loading": "^0.2.1",
+    "object-assign": "^4.1.1",
     "omit.js": "^0.1.0",
     "prop-types": "^15.5.8",
     "rc-animate": "^2.3.6",
+    "rc-dialog": "^6.5.8",
+    "rc-util": "^4.0.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   }
