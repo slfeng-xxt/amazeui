@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import './Name.css'
 
@@ -7,7 +8,7 @@ const Name = (props) => (
 )
 
 Name.propTypes = {
-  type: React.PropTypes.oneOf(['highlight', 'disabled']),
+  type: PropTypes.oneOf(['highlight', 'disabled']),
 }
 
 export default Name

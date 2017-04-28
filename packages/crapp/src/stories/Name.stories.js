@@ -1,16 +1,29 @@
 import React from 'react'
 import { storiesOf, action, linkTo } from '@kadira/storybook'
+import { text, select } from '@kadira/storybook-addon-knobs'
 
 import Name from './Name'
 
+const types = {
+  "": "",
+  highlight: 'highlight',
+  disabled: 'disabled',
+}
+
 storiesOf('Components', module)
-  .add('Name', () => (
+  .addWithInfo(
+    'Name with info',
+    `
+    A component to display a colored name tag.
+    `,
+    () => (
+      <Name name="Louie Anderson" />
+    ),
+    { inline: true },
+  )
+/*  .add('Name', () => (
     <div>
       <h2>Normal</h2>
-      <Name name="Louie Anderson" />
-      <h2>Highlighted</h2>
-      <Name name="Louie Anderson" type="highlight" />
-      <h2>Disabled</h2>
-      <Name name="Louie Anderson" type="disabled" />
+      <Name name={text('Name', 'Louie Anderson')} type={select('Type', types)} />
     </div>
-  ))
+  ))*/
