@@ -1,0 +1,13 @@
+const { CheckerPlugin } = require('awesome-typescript-loader');
+module.exports = function(config) {
+  config.resolve.extensions.unshift('.ts', '.tsx');
+  config.module.loaders[0].exclude.push(/\.ts$/, /\.tsx$/);
+  config.module.loaders.push({
+    test: /\.tsx?$/,
+    loaders: ['babel', 'awesome-typescript'],
+  });
+
+  config.plugins.push(new CheckerPlugin());
+//  console.log(config);process.exit(0);
+  return config;
+}
