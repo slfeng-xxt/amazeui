@@ -10,7 +10,12 @@ function App({ children, location, dispatch, app }) {
     lines,
     step,
     pieces,
+    undo,
+    isWin,
+    winMsg,
     siderLength,
+    startX,
+    startY,
   } = app
 
   const wuziProps = {
@@ -18,7 +23,12 @@ function App({ children, location, dispatch, app }) {
     span,
     lines,
     step,
+    isWin,
+    winMsg,
     pieces,
+    undo,
+    startX,
+    startY,
     onMove: (e) => {
       const tagName = e.target.tagName
       if(tagName === 'circle') { // 对circle元素进行事件处理
@@ -46,6 +56,21 @@ function App({ children, location, dispatch, app }) {
           })
         }
       }
+    },
+    onUndo: () => {
+      dispatch({
+        type: 'app/undo',
+      })
+    },
+    onCancelUndo: () => {
+      dispatch({
+        type: 'app/cancelUndo',
+      })
+    },
+    replay: () => {
+      dispatch({
+        type: 'app/replay',
+      })
     }
   }
   return (

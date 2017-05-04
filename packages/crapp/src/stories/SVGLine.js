@@ -10,7 +10,10 @@ const SVGLine = (props) => {
     lines,
     onMove,
     step,
+    startX,
+    startY,
     pieces,
+    isWin,
   } = props
 
   let style = {
@@ -19,8 +22,6 @@ const SVGLine = (props) => {
   }
 
   let lineItems = []
-  const startX = 15
-  const startY = 15
   const offsetX = [-15, 5]
   const offsetY = [-2, -5]
   for(let i = 1; i <= lines; i++) {
@@ -53,8 +54,8 @@ const SVGLine = (props) => {
 
   for(let i = 1; i <= lines; i++) {
     for(let j = 1; j <= lines; j++) {
-      let x = i + startX + (i - 1) * span - i
-      let y = j + startY + (j - 1) * span - j
+      let x = startX + (i - 1) * span
+      let y = startY + (j - 1) * span
       const circleProps = {
         stroke: 'white',
         fill: 'white',
@@ -80,7 +81,10 @@ const SVGLine = (props) => {
   const svgProps = {
     width: siderLength,
     height: siderLength,
-    onClick: onMove,
+  }
+
+  if(isWin === false) {
+    svgProps.onClick = onMove
   }
 
   return (
