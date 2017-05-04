@@ -39,7 +39,21 @@ const WuziHead = (props) => {
 
   return (
     <div className="header">
-      <h2>Dom版本五子棋</h2>
+      <h2>{props.version}版本五子棋</h2>
+      <div className="info">
+        <span>{info}</span>
+      </div>
+      {isWin === false ?
+      <div className="actions">
+        {undoBtn} {cancelBtn}
+      </div>
+      : ''
+      }
+    </div>
+  )
+/*  return (
+    <div className="header">
+      <h2>{props.version}版本五子棋</h2>
       <div className="info">
         <span>{info}</span>
       </div>
@@ -53,7 +67,7 @@ const WuziHead = (props) => {
       </div>
       }
     </div>
-  )
+  )*/
 }
 
 WuziHead.propTypes = {

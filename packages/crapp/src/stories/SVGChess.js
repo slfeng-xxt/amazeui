@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import './wuzi.css'
 const origStroke = 3
 
-const SVGLine = (props) => {
+const SVGChess = (props) => {
   let {
     siderLength,
     span,
@@ -13,6 +13,7 @@ const SVGLine = (props) => {
     startX,
     startY,
     pieces,
+    points,
     isWin,
   } = props
 
@@ -95,7 +96,7 @@ const SVGLine = (props) => {
   )
 }
 
-SVGLine.propTypes = {
+SVGChess.propTypes = {
 }
 
-export default SVGLine
+export default SVGChess

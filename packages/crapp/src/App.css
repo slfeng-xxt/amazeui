@@ -22,3 +22,26 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.versions {
+  background: #00a0e9;
+  height: 50px;
+}
+.versions a {
+  display: inline-block;
+  height: 40px;
+  margin: 5px;
+  line-height: 42px;
+  padding: 0 10px;
+  font-size: 15px;
+  border: 1px solid #fff;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.versions a:hover{
+  color: #f00;
+}
+.versions a.active{
+  color: #f00;
+}

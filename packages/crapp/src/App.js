@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'dva'
-import DomWuzi from './stories/DomWuzi'
+import SVGChess from './stories/SVGChess'
+import CanvasChess from './stories/CanvasChess'
+import WuziHead from './stories/WuziHead'
 
 // 这个常量需要提到配置文件中
 const origStroke = 3
@@ -10,12 +12,14 @@ function App({ children, location, dispatch, app }) {
     lines,
     step,
     pieces,
+    points,
     undo,
     isWin,
     winMsg,
     siderLength,
     startX,
     startY,
+    version,
   } = app
 
   const wuziProps = {
@@ -24,13 +28,23 @@ function App({ children, location, dispatch, app }) {
     lines,
     step,
     isWin,
+    version,
     winMsg,
     pieces,
+    points,
     undo,
     startX,
     startY,
-    onMove: (e) => {
+    dispatch,
+    onMove: (args) => {
+      if(version === 'canvas') {
+        return onCanvasMove(args)
+      }
+
+      // 对于dom来说args传入的是事件对象e
+      let e = args
       const tagName = e.target.tagName
+
       if(tagName === 'circle') { // 对circle元素进行事件处理
         /**
          * cx, cy is a SVGAnimatedLength Object
@@ -73,9 +87,44 @@ function App({ children, location, dispatch, app }) {
       })
     }
   }
+
+  const toggleVersion = (e) => {
+    dispatch({
+      type: 'app/toggleVersion',
+      payload: {
+        version: e.target.name,
+      }
+    })
+  }
+
+  const onCanvasMove = (args) => {
+    let {
+      cx,
+      cy,
+    } = args
+    dispatch({
+      type: 'app/onMove',
+      payload: {
+        x: cx,
+        y: cy,
+      },
+    })
+  }
+
   return (
     <div className="App">
-      <DomWuzi {...wuziProps} />
+      <div className="versions" onClick={toggleVersion}>
+        <a className={version === 'dom' ? 'active' : ''} name="dom">DOM版本</a>
+        <a className={version === 'canvas' ? 'active' : ''} name="canvas">Canvas版本</a>
+      </div>
+      <div className="wrapper">
+        {
+          (version === 'dom') ?
+            (<div><WuziHead {...wuziProps} />
+            <SVGChess {...wuziProps} /></div>)
+          : <CanvasChess {...wuziProps} />
+        }
+      </div>
     </div>
   )
 }
