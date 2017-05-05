@@ -13,7 +13,7 @@ app.model({
   state: {
     span: 30,  // 棋盘相邻线之间的间距
     lines: 15, // 棋盘线条行数或列数
-    siderLength: 500, // 棋盘边长， @deprecated
+    siderLength: 450, // 棋盘边长， @deprecated
     step: 0, // 当前的着子次数
     points: [], // 记录棋盘所有点的信息
     pieces: [], // 着子点信息， 后面考虑优化或废弃掉
@@ -22,7 +22,7 @@ app.model({
     winMsg: '', // 胜利后显示的信息
     startX: 15, // 棋盘基于父容器的x偏移值
     startY: 15, // 棋盘基于父容器的y偏移值
-    version: 'canvas', // 当前查看的实现版本，dom, canvas
+    version: 'dom', // 当前查看的实现版本，dom, canvas
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -215,14 +215,38 @@ app.model({
     },
     // 切换dom, canvas版本
     toggleVersion(state, action) {
+      let {
+        lines,
+        span,
+        startX,
+        startY,
+      } = state
+
+      let points = []
+      for(let i = 0; i < lines; i++) {
+        for(let j = 0; j < lines; j++) {
+          if(!points[i]) {
+            points[i] = []
+          }
+          points[i][j] = {
+            x: i * span + startX,
+            y: j * span + startY,
+            color: '',
+          }
+        }
+      }
+
       return {
         ...state,
-        ...action.payload,
         pieces: [],
-        isWin: false,
-        step: 0,
         undo: [],
+        isWin: false,
+        winMsg: '',
+        step: 0,
+        points,
+        ...action.payload
       }
+
     },
   },
 })

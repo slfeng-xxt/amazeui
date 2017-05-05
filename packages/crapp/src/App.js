@@ -45,7 +45,9 @@ function App({ children, location, dispatch, app }) {
       let e = args
       const tagName = e.target.tagName
 
-      if(tagName === 'circle') { // 对circle元素进行事件处理
+      console.log(tagName)
+
+      if(tagName === 'rect') { // 对circle元素进行事件处理
         /**
          * cx, cy is a SVGAnimatedLength Object
          * has the following properties:
@@ -53,22 +55,21 @@ function App({ children, location, dispatch, app }) {
          * 2. baseVal
          */
         const {
-          cx,
-          cy,
+          x,
+          y,
           r
         } = e.target
 
-        if(r.animVal.value === origStroke) { // 已经下子的地方不能再点击
-          const isBlack = (step % 2 === 0)
-          dispatch({
-            type: 'app/onMove',
-            payload: {
-              x: cx.animVal.value,
-              y: cy.animVal.value,
-              color: (isBlack ? 'black' : 'white'),
-            },
-          })
-        }
+        const isBlack = (step % 2 === 0)
+        dispatch({
+          type: 'app/onMove',
+          payload: {
+            x: x.animVal.value + span / 2,
+            y: y.animVal.value + span / 2,
+            color: (isBlack ? 'black' : 'white'),
+          },
+        })
+
       }
     },
     onUndo: () => {

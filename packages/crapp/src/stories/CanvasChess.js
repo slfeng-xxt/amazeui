@@ -14,7 +14,12 @@ class CanvasChess extends React.Component {
   }
 
   componentDidMount() {
+    // 通过js设置高度和宽度
+    let width = this.props.siderLength
     let canvas = ReactDOM.findDOMNode(this.refs.canvas)
+    canvas.width = width
+    canvas.height = width
+
     this.canvas = canvas
 
     drawChessBoard(canvas, this.props)
@@ -86,16 +91,16 @@ class CanvasChess extends React.Component {
       winMsg,
       pieces,
       undo,
+      version,
       dispatch,
     } = this.props
-
-    let width = (lines - 1) * span * 2
 
     let headProps = {
       step,
       isWin,
       winMsg,
       pieces,
+      version,
       undo,
       onUndo: () => {
         dispatch({
@@ -120,8 +125,10 @@ class CanvasChess extends React.Component {
     return (
       <div>
         <WuziHead {...headProps} />
-        <canvas ref="canvas" width={width} height={width} onClick={this.handleClick.bind(this)}>
-        </canvas>
+        <div className="chessboard">
+          <canvas ref="canvas" onClick={this.handleClick.bind(this)}>
+          </canvas>
+        </div>
       </div>
     )
   }
