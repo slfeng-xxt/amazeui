@@ -98,7 +98,7 @@ export default class Modal extends React.Component<ModalProps, any> {
 
   context: ModalContext;
 
-  handleCancel = (e) => {
+  handleCancel = (e?: any) => {
     const onCancel = this.props.onCancel;
     if (onCancel) {
       onCancel(e);

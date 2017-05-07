@@ -9,9 +9,13 @@ import {
   Col,
   Button,
   Modal,
+  Breadcrumb,
+  Anchor,
 } from '../components'
 import 'antd/dist/antd.css'
 import styles from './app.less'
+
+const { Link } = Anchor;
 
 function App ({ children, location, dispatch, app, loading }) {
   const {
@@ -43,6 +47,14 @@ function App ({ children, location, dispatch, app, loading }) {
       <Modal title="弹窗标题" visible={isVisible} onOk={handleOk} onCancel={handleCancel}>
         <div>Hello</div>
       </Modal>
+      <Breadcrumb>
+        <Breadcrumb.Item>Home</Breadcrumb.Item>
+        <Breadcrumb.Item><a href="">Application</a></Breadcrumb.Item>
+      </Breadcrumb>
+      <Anchor>
+        <Link href="#A" title="A" />
+        <Link href="#B" title="B" />
+      </Anchor>
     </div>
   )
 }
