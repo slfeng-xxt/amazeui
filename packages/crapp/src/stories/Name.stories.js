@@ -42,9 +42,9 @@ storiesOf('Components', module)
     { inline: true },
   )
 
-  /*  .add('Name', () => (
+  .add('Name', () => (
     <div>
       <h2>Normal</h2>
       <Name name={text('Name', 'Louie Anderson')} type={select('Type', types)} />
     </div>
-  ))*/
+  ))

@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "antd": "^2.10.0",
     "dva": "^1.2.1",
+    "moment": "^2.18.1",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
@@ -21,10 +23,10 @@
   "scripts": {
     "start": "node scripts/customized-config.js start",
     "build": "node scripts/customized-config.js build",
-    "test": "node scripts/customized-config.js test --env=jsdom",
+    "test-new": "node scripts/customized-config.js test --env=jsdom",
     "start-o": "react-scripts start",
     "build-o": "react-scripts build",
-    "test-o": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom",
     "test-storybook": "storyshots",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
