@@ -1,0 +1,781 @@
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<html>
+
+<head>
+    <title>test eBay api Results</title>
+    <!-- <link href="bootstrap-4.0.0-alpha.5-dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="bootstrap-4.0.0-alpha.5-dist/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="handsontable-master/dist/handsontable.full.min.css">
+    <style type="text/css">
+    body {
+        font-family: arial, sans-serif;
+    }
+    
+    .error {
+        width: 200px;
+        height: 20px;
+        height: auto;
+        position: absolute;
+        left: 50%;
+        margin-left: -100px;
+        bottom: 10px;
+        background-color: #383838;
+        color: #F0F0F0;
+        font-family: Calibri;
+        font-size: 20px;
+        padding: 10px;
+        text-align: center;
+        border-radius: 2px;
+        -webkit-box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
+        -moz-box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
+        box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
+    }
+    
+    .tooltip-wrapper {
+        display: inline-block;
+        /* display: block works as well */
+    }
+    
+    .tooltip-wrapper .btn[disabled] {
+        /* don't let button block mouse events from reaching wrapper */
+        pointer-events: none;
+    }
+    
+    .tooltip-wrapper.disabled {
+        /* OPTIONAL pointer-events setting above blocks cursor setting, so set it here */
+        cursor: not-allo
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            <h1 id="headstatus">ebay api testing</h1>
+            <!-- <p>Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile-first projects on the web.</p> -->
+        </div>
+        <!--     <p>This is some text.</p>
+    <p>This is another text.</p> -->
+    </div>
+    <div id="results"></div>
+    <script>
+    var ongoing = 0;
+    var localsettings = 0;
+    var example;
+    var hot1;
+    var chart_data = [];
+    var tabledata;
+
+    Date.prototype.addDays = function(days) {
+        var dat = new Date(this.valueOf());
+        dat.setDate(dat.getDate() + days);
+        return dat;
+    }
+
+    // function SaveSettings(lg1, dataFromlg2, dataTolg3) {
+    //     // Check browser support
+    //     if (typeof(Storage) !== "undefined") {
+    //         // Store
+    //         localStorage.setItem("storedObject", JSON.stringify({
+    //             "lg": lg1,
+    //             "dataFromlg": dataFromlg2,
+    //             "dataTolg": dataTolg3
+    //         }));
+    //         // Retrieve
+    //         // document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+    //         // var retrievedObject = localStorage.getItem('storedObject');
+    //         $('.error').stop().fadeIn(400).delay(3000).fadeOut(400);
+    //     } else {
+    //         document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+    //     }
+    // }
+
+    // function GetSettings() {
+    //     if (typeof(Storage) !== "undefined") {
+    //         var retrievedObject = localStorage.getItem('storedObject');
+    //         localsettings = JSON.parse(retrievedObject)
+    //         if (localsettings != null) {
+    //             document.getElementById("lg").value = localsettings.lg;
+    //             document.getElementById("dateFromlg").value = localsettings.dataFromlg;
+    //             document.getElementById("dateTolg").value = localsettings.dataTolg;
+    //         }
+    //     }
+    // }
+
+    function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
+
+        //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+        var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+        var CSV = '';
+        //This condition will generate the Label/Header
+        if (ShowLabel) {
+            var row = "";
+
+            //This loop will extract the label from 1st index of on array
+            for (var index in arrData[0]) {
+                //Now convert each value to string and comma-seprated
+                row += index + ',';
+            }
+            row = row.slice(0, -1);
+            //append Label row with line break
+            CSV += row + '\r\n';
+        }
+
+        //1st loop is to extract each row
+        for (var i = 0; i < arrData.length; i++) {
+            var row = "";
+            //2nd loop will extract each column and convert it in string comma-seprated
+            for (var index in arrData[i]) {
+                row += '"' + arrData[i][index] + '",';
+            }
+            row.slice(0, row.length - 1);
+            //add a line break after each row
+            CSV += row + '\r\n';
+        }
+
+        if (CSV == '') {
+            alert("Invalid data");
+            return;
+        }
+
+        //this trick will generate a temp "a" tag
+        var link = document.createElement("a");
+        link.id = "lnkDwnldLnk";
+
+        //this part will append the anchor tag and remove it after automatic click
+        document.body.appendChild(link);
+
+        var csv = CSV;
+        blob = new Blob([csv], {
+            type: 'text/csv'
+        });
+        var csvUrl = window.webkitURL.createObjectURL(blob);
+        var filename = ReportTitle;
+        $("#lnkDwnldLnk")
+            .attr({
+                'download': filename,
+                'href': csvUrl
+            });
+
+        $('#lnkDwnldLnk')[0].click();
+        document.body.removeChild(link);
+    }
+
+    function aioURLmaker(page_number, on_going, min_price, query_string, fromdate, todate, app_name) {
+
+        var urlfilter = "";
+
+        var filterarray = [{
+                "name": "MinPrice",
+                "value": min_price == null ? 0 : min_price,
+                "paramName": "Currency",
+                "paramValue": "USD"
+            }, // CNY
+            {
+                "name": "FreeShippingOnly",
+                "value": "false",
+                "paramName": "",
+                "paramValue": ""
+            }, {
+                "name": "SoldItemsOnly",
+                "value": "true",
+                "paramName": "",
+                "paramValue": ""
+            }, {
+                "name": "EndTimeFrom",
+                "value": fromdate,
+                "paramName": "",
+                "paramValue": ""
+            }, {
+                "name": "EndTimeTo",
+                "value": todate,
+                "paramName": "",
+                "paramValue": ""
+            }
+
+        ];
+
+
+        // Iterate through each filter in the array
+        for (var i = 0; i < filterarray.length; i++) {
+            //Index each item filter in filterarray
+            var itemfilter = filterarray[i];
+            // Iterate through each parameter in each item filter
+            for (var index in itemfilter) {
+                // Check to see if the paramter has a value (some don't)
+                if (itemfilter[index] !== "") {
+                    if (itemfilter[index] instanceof Array) {
+                        for (var r = 0; r < itemfilter[index].length; r++) {
+                            var value = itemfilter[index][r];
+                            urlfilter += "&itemFilter\(" + i + "\)." + index + "\(" + r + "\)=" + value;
+                        }
+                    } else {
+                        urlfilter += "&itemFilter\(" + i + "\)." + index + "=" + itemfilter[index];
+                    }
+                }
+            }
+        }
+        //davidkwa-bidtify-PRD-645f30466-13f9307d
+        // Construct the request
+        // Replace MyAppID with your Production AppID
+        var url = "http://svcs.ebay.com/services/search/FindingService/v1";
+        if (!on_going)
+            url += "?OPERATION-NAME=findCompletedItems";
+        else
+            url += "?OPERATION-NAME=findItemsByKeywords";
+        url += "&SERVICE-VERSION=1.0.0";
+        url += "&SECURITY-APPNAME=" + app_name;
+        url += "&GLOBAL-ID=EBAY-US";
+        url += "&RESPONSE-DATA-FORMAT=JSON";
+        //url += "&callback=_cb_findItemsByKeywords";
+        url += "&REST-PAYLOAD";
+        url += "&keywords="; //Adidas%20yeezy%20v2%20core%20black%20white%20size%2010
+        url += encodeURIComponent(query_string);
+        url += "&paginationInput.pageNumber=" + page_number;
+        url += "&paginationInput.entriesPerPage=100";
+        url += urlfilter;
+
+        return url;
+    }
+
+    function ebay_requester(page_number, keywords, datefrom, dateto, chart_data, on_going, min_price, rowid, app_name) {
+        var d_dateto = new Date(dateto);
+        var d_datefrom = new Date(datefrom);
+        // if (dateto == "")
+        //     d_dateto = new Date($("#dateTolg").val())
+        // if (datefrom = "")
+        //     d_datefrom = new Date($("#dateFromlg").val())
+
+        var days_diff = (d_dateto - d_datefrom) / 1000 / (60 * 60 * 24);
+
+        // query first to see if page > 100, if page > 100 split into 2 parts
+        var url2 = aioURLmaker(page_number, on_going, min_price, keywords, d_datefrom.toISOString(), d_dateto.toISOString(), app_name);
+
+        $.ajax({
+            url: url2,
+            async: false,
+            dataType: 'jsonp', // Notice! JSONP <-- P (lowercase),
+            beforeSend: function() {
+                if (tabledata[rowid][4] == null) {
+                    tabledata[rowid][4] = 1;
+                    tabledata[rowid][5] = 0;
+                    hot1.setDataAtCell(rowid, 4, 1);
+                    hot1.setDataAtCell(rowid, 5, 0);
+                } else {
+                    tabledata[rowid][4] = tabledata[rowid][4] + 1;
+                    hot1.setDataAtCell(rowid, 4, tabledata[rowid][4]);
+                }
+            },
+            success: function(root) {
+                var j = 0;
+                if (on_going)
+                    j = root.findItemsByKeywordsResponse[0];
+                else
+                    j = root.findCompletedItemsResponse[0];
+
+                var items = j.searchResult[0].item || []
+
+                var total_page = parseInt(j.paginationOutput[0].totalPages[0]);
+                // if (tabledata[rowid][4] == null) {
+                //     tabledata[rowid][4] = total_page;
+                //     tabledata[rowid][5] = 0;
+                //     hot1.setDataAtCell(rowid, 4, total_page);
+                //     hot1.setDataAtCell(rowid, 5, 0);
+                // }
+
+                if (total_page > 100) {
+                    console.log(keywords + " page>100, split " + d_datefrom + ' ' + d_datefrom.addDays(Math.round(days_diff / 2)))
+                    ebay_requester(1, keywords, d_datefrom, d_datefrom.addDays(Math.round(days_diff / 2)), chart_data, on_going, min_price, rowid, app_name);
+                    console.log(keywords + " page>100, split " + d_datefrom.addDays(Math.round(days_diff / 2)) + ' ' + d_dateto)
+                    ebay_requester(1, keywords, d_datefrom.addDays(Math.round(days_diff / 2)), d_dateto, chart_data, on_going, min_price, rowid, app_name);
+                } else {
+                    tabledata[rowid][5] = tabledata[rowid][5] + 1;
+                    hot1.setDataAtCell(rowid, 5, hot1.getDataAtCell(rowid, 5) + 1);
+                    for (var i = 0; i < items.length; ++i) {
+                        var item = items[i];
+                        var title = item.title;
+                        //var pic      = item.galleryURL;
+                        //var viewitem = item.viewItemURL;
+
+                        chart_data.push([keywords, item.itemId[0], title, item.listingInfo[0].endTime[0], item.sellingStatus[0].currentPrice[0].__value__, item.listingInfo[0].listingType[0], item.condition[0].conditionDisplayName[0]])
+                            // if (null != title && null != viewitem) {
+                            //   html.push('<tr><td>' + '<img src="' + pic + '" border="0">' + '</td>' + 
+                            //   '<td><a href="' + viewitem + '" target="_blank">' + title + '</a></td></tr>');
+                            // }
+                    }
+                    var this_page = parseInt(j.paginationOutput[0].pageNumber[0]);
+                    // var total_page = parseInt(j.paginationOutput[0].totalPages[0]);
+                    if (total_page > 1 && this_page < total_page && this_page <= 100) {
+                        // if (total_page > 100)
+                        //     $("#warning").html("Warning: total_page > 100");
+                        //document.write("Warning: total_page > 100");
+                        //$("#progress").html(this_page.toString() + " / " + total_page.toString());
+                        console.log(this_page.toString() + " / " + total_page.toString())
+                        ebay_requester(page_number + 1, keywords, d_datefrom, d_dateto, chart_data, on_going, min_price, rowid, app_name)
+                    }
+
+                    tabledata[rowid][5] = tabledata[rowid][5]++;
+                    hot1.setDataAtCell(rowid, 5, tabledata[rowid][5]);
+
+                    // if (this_page == total_page) {
+                    //     var filename = document.getElementById('lg').value + '_' + document.getElementById('dateFromlg').value + '_' + document.getElementById('dateTolg').value + '.csv';
+                    //     JSONToCSVConvertor(chart_data, filename, true);
+                    // }
+                    //google.charts.load("current", {packages:["corechart"]});
+                    //google.charts.setOnLoadCallback(drawChart);
+                    checkcomplete();
+                }
+
+
+
+            },
+            error: function() {
+                $("#headstatus").html("Oops!")
+                alert("Error, you might need to change the APPname");
+            }
+        });
+    }
+
+    // function ebay_request(page_number) { //, keywords, datefrom, dateto) {
+
+    //     var d_dateto = new Date($("#dateTolg").val())
+    //     var d_datefrom = new Date($("#dateFromlg").val())
+    //     var days_diff = (d_dateto - d_datefrom) / 1000 / (60 * 60 * 24);
+
+    //     // query first to see if page > 100, if page > 100 split into 2 parts
+
+
+
+    //     if (page_number == 1) {
+    //         SaveSettings(document.getElementById('lg').value, document.getElementById('dateFromlg').value, document.getElementById('dateTolg').value);
+    //         chart_data = []
+    //         ongoing = document.getElementById('boxongoing').checked;
+    //         // Execute the function to build the URL filter
+    //         // var t = new Date(document.getElementById("dateFromlg").value)
+    //         // filterarray[4].value = t.toISOString()
+    //         // t = new Date(document.getElementById("dateTolg").value)
+    //         // filterarray[5].value = t.toISOString()
+    //         filterarray[4].value = $("#dateFromlg").val();
+    //         filterarray[5].value = $("#dateTolg").val();
+    //         if (ongoing)
+    //             filterarray[3].value = false;
+    //         buildURLArray(filterarray);
+    //     }
+
+    //     //davidkwa-bidtify-PRD-645f30466-13f9307d
+    //     // Construct the request
+    //     // Replace MyAppID with your Production AppID
+    //     var url = "http://svcs.ebay.com/services/search/FindingService/v1";
+    //     if (!ongoing)
+    //         url += "?OPERATION-NAME=findCompletedItems";
+    //     else
+    //         url += "?OPERATION-NAME=findItemsByKeywords";
+    //     url += "&SERVICE-VERSION=1.0.0";
+    //     url += "&SECURITY-APPNAME=davidkwa-bidtify-PRD-645f30466-13f9307d";
+    //     url += "&GLOBAL-ID=EBAY-US";
+    //     url += "&RESPONSE-DATA-FORMAT=JSON";
+    //     //url += "&callback=_cb_findItemsByKeywords";
+    //     url += "&REST-PAYLOAD";
+    //     url += "&keywords="; //Adidas%20yeezy%20v2%20core%20black%20white%20size%2010
+    //     url += encodeURIComponent($("#lg").val());
+    //     url += "&paginationInput.pageNumber=" + page_number;
+    //     url += "&paginationInput.entriesPerPage=100";
+    //     url += urlfilter;
+
+
+    //     // Submit the request 
+    //     s = document.createElement('script'); // create script element
+    //     s.src = url;
+    //     url2 = url;
+    //     document.body.appendChild(s);
+
+    //     $.ajax({
+    //         url: url2,
+    //         dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
+    //         success: function(root) {
+    //             var j = 0;
+    //             if (ongoing)
+    //                 j = root.findItemsByKeywordsResponse[0];
+    //             else
+    //                 j = root.findCompletedItemsResponse[0];
+
+    //             var items = j.searchResult[0].item || []
+    //             for (var i = 0; i < items.length; ++i) {
+    //                 var item = items[i];
+    //                 var title = item.title;
+    //                 //var pic      = item.galleryURL;
+    //                 //var viewitem = item.viewItemURL;
+
+    //                 chart_data.push([title, item.listingInfo[0].endTime[0], item.sellingStatus[0].currentPrice[0].__value__])
+    //                     // if (null != title && null != viewitem) {
+    //                     //   html.push('<tr><td>' + '<img src="' + pic + '" border="0">' + '</td>' + 
+    //                     //   '<td><a href="' + viewitem + '" target="_blank">' + title + '</a></td></tr>');
+    //                     // }
+    //             }
+    //             var this_page = parseInt(j.paginationOutput[0].pageNumber[0]);
+    //             var total_page = parseInt(j.paginationOutput[0].totalPages[0]);
+    //             if (total_page > 1 && this_page < total_page && this_page <= 100) {
+    //                 if (total_page > 100)
+    //                     $("#warning").html("Warning: total_page > 100");
+    //                 //document.write("Warning: total_page > 100");
+    //                 $("#progress").html(this_page.toString() + " / " + total_page.toString());
+    //                 ebay_request(this_page + 1);
+    //             }
+    //             if (this_page == total_page) {
+    //                 var filename = document.getElementById('lg').value + '_' + document.getElementById('dateFromlg').value + '_' + document.getElementById('dateTolg').value + '.csv';
+    //                 JSONToCSVConvertor(chart_data, filename, true);
+    //             }
+    //             //google.charts.load("current", {packages:["corechart"]});
+    //             //google.charts.setOnLoadCallback(drawChart);
+    //         },
+    //         error: function() {
+    //             $("#headstatus").html("Oops!")
+    //             alert("Error, you might need to change the APPname");
+    //         }
+    //     });
+
+
+    // }
+    //$("#searchbtn").onclick(ebay_request(0));
+
+
+    // function drawChart() {
+    //     var data = google.visualization.arrayToDataTable(chart_data);
+
+    //     var options = {
+    //         title: 'Lengths of dinosaurs, in meters',
+    //         legend: {
+    //             position: 'none'
+    //         },
+    //         histogram: {
+    //             bucketSize: 1,
+    //             maxNumBuckets: 200,
+    //         }
+    //     };
+
+    //     var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
+    //     chart.draw(data, options);
+    // }
+
+    // Parse the response and build an HTML table to display search results
+
+    function checkcomplete() {
+        var completed = true;
+        $.each(tabledata, function(index, item) {
+            completed = (item[4] == item[5]);
+            return completed;
+        })
+        if (completed) {
+            $('#exportbtn').prop('disabled', false);
+            $("#headstatus").html("rest");
+        }
+    }
+
+    function forceexport() {
+        var x;
+        if (confirm("Confirm export") == true) {
+            JSONToCSVConvertor(chart_data, 'Export.csv', true);
+        }
+    }
+
+    function _cb_findItemsByKeywords(root) {
+        var items = root.findItemsByKeywordsResponse[0].searchResult[0].item || [];
+        var html = [];
+        html.push('<table width="100%" border="0" cellspacing="0" cellpadding="3"><tbody>');
+        for (var i = 0; i < items.length; ++i) {
+            var item = items[i];
+            var title = item.title;
+            var pic = item.galleryURL;
+            var viewitem = item.viewItemURL;
+            if (null != title && null != viewitem) {
+                html.push('<tr><td>' + '<img src="' + pic + '" border="0">' + '</td>' +
+                    '<td><a href="' + viewitem + '" target="_blank">' + title + '</a></td></tr>');
+            }
+        }
+        html.push('</tbody></table>');
+        document.getElementById("results").innerHTML = html.join("");
+    } // End _cb_findItemsByKeywords() function
+
+    // Parse the response and build an HTML table to display search results
+    function _cb_findCompletedItems(root) {
+        var items = root.findItemsByKeywordsResponse[0].searchResult[0].item || [];
+        var html = [];
+        html.push('<table width="100%" border="0" cellspacing="0" cellpadding="3"><tbody>');
+        for (var i = 0; i < items.length; ++i) {
+            var item = items[i];
+            var title = item.title;
+            var pic = item.galleryURL;
+            var viewitem = item.viewItemURL;
+            if (null != title && null != viewitem) {
+                html.push('<tr><td>' + '<img src="' + pic + '" border="0">' + '</td>' +
+                    '<td><a href="' + viewitem + '" target="_blank">' + title + '</a></td></tr>');
+            }
+        }
+        html.push('</tbody></table>');
+        document.getElementById("results").innerHTML = html.join("");
+    } // End _cb_findItemsByKeywords() function
+
+    // Create a JavaScript array of the item filters you want to use in your request
+    // var filterarray = [{
+    //         "name": "MinPrice",
+    //         "value": "10",
+    //         "paramName": "Currency",
+    //         "paramValue": "USD"
+    //     }, // CNY
+    //     {
+    //         "name": "FreeShippingOnly",
+    //         "value": "false",
+    //         "paramName": "",
+    //         "paramValue": ""
+    //     }, {
+    //         "name": "ListingType",
+    //         "value": ["AuctionWithBIN", "FixedPrice", "StoreInventory"],
+    //         "paramName": "",
+    //         "paramValue": ""
+    //     }, {
+    //         "name": "SoldItemsOnly",
+    //         "value": "true",
+    //         "paramName": "",
+    //         "paramValue": ""
+    //     }, {
+    //         "name": "EndTimeFrom",
+    //         "value": "",
+    //         "paramName": "",
+    //         "paramValue": ""
+    //     }, {
+    //         "name": "EndTimeTo",
+    //         "value": "",
+    //         "paramName": "",
+    //         "paramValue": ""
+    //     }
+
+    // ];
+
+
+    // Define global variable for the URL filter
+    // var urlfilter = "";
+
+    // Generates an indexed URL snippet from the array of item filters
+    // function buildURLArray() {
+    //     // Iterate through each filter in the array
+    //     for (var i = 0; i < filterarray.length; i++) {
+    //         //Index each item filter in filterarray
+    //         var itemfilter = filterarray[i];
+    //         // Iterate through each parameter in each item filter
+    //         for (var index in itemfilter) {
+    //             // Check to see if the paramter has a value (some don't)
+    //             if (itemfilter[index] !== "") {
+    //                 if (itemfilter[index] instanceof Array) {
+    //                     for (var r = 0; r < itemfilter[index].length; r++) {
+    //                         var value = itemfilter[index][r];
+    //                         urlfilter += "&itemFilter\(" + i + "\)." + index + "\(" + r + "\)=" + value;
+    //                     }
+    //                 } else {
+    //                     urlfilter += "&itemFilter\(" + i + "\)." + index + "=" + itemfilter[index];
+    //                 }
+    //             }
+    //         }
+    //     }
+    // } // End buildURLArray() function
+    </script>
+    <div class="container">
+        <form class="form-horizontal">
+            <div class="form-group form-group-lg">
+                <div class='rowtable'>
+                    <div class='row'>
+                        <!-- <div class="col-sm-3">
+                            <label class="control-label" for="lg">Keyword</label>
+                            <input class="form-control" type="text" id="lg" value="Jordan 1 banned bred">
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="control-label" for="dateFromlg">FromDate</label>
+                            <input class="form-control" type="text" id="dateFromlg" value="2016-09-01T00:00:01.000Z">
+                        </div> -->
+                        <!--                 <div class="form-group col-sm-3 ">
+                            <label for="dateFromlg" class="control-label">From Date</label>
+                            <div class="input-group date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dateFromlg">
+                                <input class="form-control" size="16" type="text" value="" readonly>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                            </div>
+                            <input type="hidden" id="dateFromlg" value="" />
+                            <br/>
+                        </div> -->
+                        <!-- <div class="col-sm-3">
+                            <label class="control-label" for="dateTolg">ToDate</label>
+                            <input class="form-control" type="text" id="dateTolg" value="2016-10-30T23:59:59.000Z">
+                            <input type="checkbox" id="boxongoing" name="ongoing" value="1" disabled="true">ongoing
+                            <br>
+                        </div> -->
+                        <!--                 <div class="form-group col-sm-3 ">
+                            <label for="dateTolg" class="control-label">To Date</label>
+                            <div class="input-group date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dateTolg">
+                                <input class="form-control" size="16" type="text" value="" readonly>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                            </div>
+                            <input type="hidden" id="dateTolg" value="" />
+                            <br/>
+                        </div> -->
+                    </div>
+                </div>
+                <br>
+                <br>
+                <!-- <button id="searchbtn" type="button" class="btn btn-default col-sm-1" onclick="ebay_request(1)"><span style="font-size:smaller;">Export</span></button>
+                <button id="savebtn" type="button" class="btn btn-default col-sm-1" onclick="SaveSettings(document.getElementById('lg').value, document.getElementById('dateFromlg').value, document.getElementById('dateTolg').value)"><span style="font-size:smaller;">Save Settings</span></button> -->
+                <div class="tooltip-wrapper disabled" data-title="Export will be enable once completed download">
+                    <button id="exportbtn" type="button" class="btn btn-default col-sm-12" onclick="JSONToCSVConvertor(chart_data, 'Export.csv', true);" disabled><span style="font-size:smaller;">Export</span></button>
+                </div>
+                <button id="tablebutton" type="button" class="btn btn-default col-sm-1" onclick="pull_table_data()"><span style="font-size:smaller;">Get data</span></button>
+                <button id="forcedownloadbutton" type="button" class="btn btn-default col-sm-1" onclick="forceexport()"><span style="font-size:smaller;">ExportB4finish</span></button>
+            </div>
+        </form>
+    </div>
+    <div id="warning"></div>
+    <div id="progress"></div>
+    <div>
+        <p>Ctrl-z to un-do , Ctrl-y to re-do at anytime</p>
+        <p>insert button to add extra row at the bottom </p>
+        <p>delete button to delete highlighted row</p>
+        <p>Only Sold items will be exported.</p>
+    </div>
+    <div id="example1" class="hot handsontable htRowHeaders htColumnHeaders"></div>
+    <div class='jobstarted' style='display:none'>Start working</div>
+    <script src="bootstrap-4.0.0-alpha.5-dist/js/jquery-3.1.1.min.js"></script>
+    <script src="bootstrap-4.0.0-alpha.5-dist/js/tether.min.js"></script>
+    <script src="bootstrap-4.0.0-alpha.5-dist/js/bootstrap.min.js"></script>
+    <script src="bootstrap-4.0.0-alpha.5-dist/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="handsontable-master/dist/handsontable.full.min.js"></script>
+    <script>
+    function createtable() {
+
+        example = document.getElementById('example1'),
+            hot1;
+
+        hot1 = new Handsontable(example, {
+            data: tabledata,
+            // width: 1300,
+            // height: 320,
+            colWidths: 200,
+            rowHeights: 23,
+            rowHeaders: true,
+            persistentState: true,
+            colHeaders: ['Keyword', 'From Date', 'To Date', 'Min $ (USD)', 'Request', 'Completed Request', 'APPname'],
+            columns: [{}, {
+                    type: 'date',
+                    dateFormat: 'MM/DD/YYYY',
+                    correctFOrmat: true
+                }, {
+                    type: 'date',
+                    dateFormat: 'MM/DD/YYYY',
+                    correctFOrmat: true
+                }, {
+                    type: 'numeric',
+                    format: '$ 0,0.00'
+                }, {
+                    type: 'numeric',
+                    readOnly: true
+                }, {
+                    type: 'numeric',
+                    readOnly: true
+                }, {}
+
+            ],
+            afterChange: function(change, source) {
+                // restore table after reload of a page
+                if (source === "loadData") {
+                    // load data from local storage
+                    if (localStorage['data']) {
+                        data = JSON.parse(localStorage['data'])
+                        this.loadData(data);
+                        this.render();
+                        return
+                    }
+
+                } else {
+                    // save all data to local storge if the edit happends
+                    localStorage['data'] = JSON.stringify(this.getData());
+                    return
+                }
+            },
+            beforeKeyDown: function(event) {
+                //event.stopImmediatePropagation();
+                if (event.key == "Insert") {
+                    var sel = this.getSelected();
+                    if (sel !== undefined)
+                        this.alter("insert_row", null);
+                }
+                if (event.key == "Delete") {
+                    var sel = this.getSelected();
+                    // console.log(sel);
+                    this.alter("remove_row", sel[0], sel[2] - sel[0] + 1)
+                    localStorage['data'] = JSON.stringify(this.getData());
+                }
+
+            }
+        });
+
+        function bindDumpButton() {
+            if (typeof Handsontable === "undefined") {
+                return;
+            }
+
+            Handsontable.Dom.addEvent(document.body, 'click', function(e) {
+
+                var element = e.target || e.srcElement;
+
+                if (element.nodeName == "BUTTON" && element.name == 'dump') {
+                    var name = element.getAttribute('data-dump');
+                    var instance = element.getAttribute('data-instance');
+                    var hot = window[instance];
+                    console.log('data of ' + name, hot.getData());
+                }
+            });
+        }
+        bindDumpButton();
+
+        // $(document).keyup(function(e) { // if (e.keyCode == 45) { // var sel = hot1.getSelected(); // if (sel !== undefined) // hot1.alter("insert_row", null); // } // if (e.keyCode == 46) { // var sel = hot1.getSelected(); // // console.log(sel); // hot1.alter("remove_row", sel[0], sel[2] - sel[0] + 1) // } // }); //insert key
+
+
+    }
+
+    function pull_table_data() {
+        chart_data = [];
+        $("#headstatus").html("still working (hard)")
+        console.log(hot1.getData());
+        tabledata = hot1.getData();
+        $.each(tabledata, function(key, value) {
+            value[4] = null;
+            value[5] = null;
+        });
+        $.each(hot1.getData(), function(key, value) {
+            if (value[0] != null && value[0] != "") {
+                ebay_requester(1, value[0], value[1], value[2], chart_data, false, value[3], key, value[6]);
+                console.log(value[0] + " done");
+            }
+        });
+    }
+
+    $(function() {
+        $('.tooltip-wrapper').tooltip({
+            position: "bottom"
+        });
+    });
+
+    $(document).ready(function() {
+
+
+
+        //GetSettings();
+
+        createtable();
+
+    });
+    </script>
+</body>
+
+</html>

@@ -1,46 +1,29 @@
-Immutable collections for JavaScript
-====================================
+JavaScript不可变集合
+===================
+Immutable数据一旦创建就不能更改，这样可以让应用程序开发更简单、无需保护性拷贝(no defensive copy)、以及能使用简单的逻辑实现先进的存储和变化监测技术。
+Persistent数据提供可变API，它们不在原地更新数据，而总是通过产生新的更新后数据的方式实现。
 
-[![Build Status](https://travis-ci.org/facebook/immutable-js.svg?branch=master)](https://travis-ci.org/facebook/immutable-js)
+Immutable.js提供了很多持久化不可变数据结构, 包括:
+* List
+* Stack
+* OrderedMap
+* Set
+* OrderedSet
+* Record
 
-[Immutable][] data cannot be changed once created, leading to much simpler
-application development, no defensive copying, and enabling advanced memoization
-and change detection techniques with simple logic. [Persistent][] data presents
-a mutative API which does not update the data in-place, but instead always
-yields new updated data.
+这些数据结构在现代JavaScript虚拟机中都非常有效，使用Clojure, Scala中流行的hash maps尝试和向量尝试达到共享结构, 最小化需要拷贝或缓存的数据。
 
-Immutable.js provides many Persistent Immutable data structures including:
-`List`, `Stack`, `Map`, `OrderedMap`, `Set`, `OrderedSet` and `Record`.
+Immutable.js也提供了惰性的Seq, 允许有效的集合链式方法， 就像map, filter一样，不需要中介出现。使用Range和Repeat创建一些Seq。
 
-These data structures are highly efficient on modern JavaScript VMs by using
-structural sharing via [hash maps tries][] and [vector tries][] as popularized
-by Clojure and Scala, minimizing the need to copy or cache data.
-
-Immutable.js also provides a lazy `Seq`, allowing efficient
-chaining of collection methods like `map` and `filter` without creating
-intermediate representations. Create some `Seq` with `Range` and `Repeat`.
-
-Want to hear more? Watch the presentation about Immutable.js:
-
-<a href="https://youtu.be/I7IdS-PbEgI" target="_blank" alt="Immutable Data and React"><img src="https://img.youtube.com/vi/I7IdS-PbEgI/0.jpg" /></a>
-
-[Persistent]: http://en.wikipedia.org/wiki/Persistent_data_structure
-[Immutable]: http://en.wikipedia.org/wiki/Immutable_object
-[hash maps tries]: http://en.wikipedia.org/wiki/Hash_array_mapped_trie
-[vector tries]: http://hypirion.com/musings/understanding-persistent-vector-pt-1
-
-
-Getting started
+开始
 ---------------
 
-Install `immutable` using npm.
-
+使用npm安装immutable:
 ```shell
 npm install immutable
 ```
 
-Then require it into any module.
-
+然后在任意模块中引入它:
 ```js
 const { Map } = require('immutable')
 const map1 = Map({ a: 1, b: 2, c: 3 })
@@ -51,12 +34,12 @@ map2.get('b') // 50
 
 ### Browser
 
-To use Immutable.js from a browser, download [dist/immutable.min.js](https://github.com/facebook/immutable-js/blob/master/dist/immutable.min.js)
-or use a CDN such as [CDNJS](https://cdnjs.com/libraries/immutable)
-or [jsDelivr](http://www.jsdelivr.com/#!immutable.js).
+要在浏览器中使用
+* 下载[dist/immutable.min.js](https://github.com/facebook/immutable-js/blob/master/dist/immutable.min.js)
+* [CDNJS](https://cdnjs.com/libraries/immutable)
+* [jsDelivr](http://www.jsdelivr.com/#!immutable.js).
 
-Then, add it as a script tag to your page:
-
+然后在页面添加一个script标签:
 ```html
 <script src="immutable.min.js"></script>
 <script>
@@ -66,9 +49,7 @@ Then, add it as a script tag to your page:
     map2.get('b'); // 50
 </script>
 ```
-
-Or use an AMD loader (such as [RequireJS](http://requirejs.org/)):
-
+或者使用AMD加载器(例如[RequireJS](http://requirejs.org/)):
 ```js
 require(['./immutable.min.js'], function (Immutable) {
     var map1 = Immutable.Map({a:1, b:2, c:3});
@@ -78,9 +59,7 @@ require(['./immutable.min.js'], function (Immutable) {
 });
 ```
 
-If you're using [webpack](https://webpack.github.io/) or
-[browserify](http://browserify.org/), the `immutable` npm module also works
-from the browser.
+如果使用webpack或browserify，immutable npm模块在浏览器中也是可用的。
 
 ### Flow & TypeScript
 
@@ -518,3 +497,11 @@ License
 -------
 
 Immutable.js is [BSD-licensed](https://github.com/facebook/immutable-js/blob/master/LICENSE). We also provide an additional [patent grant](https://github.com/facebook/immutable-js/blob/master/PATENTS).
+
+## 参考链接
+[Persistent]: http://en.wikipedia.org/wiki/Persistent_data_structure
+[Immutable]: http://en.wikipedia.org/wiki/Immutable_object
+[hash maps tries]: http://en.wikipedia.org/wiki/Hash_array_mapped_trie
+[vector tries]: http://hypirion.com/musings/understanding-persistent-vector-pt-1
+
+
