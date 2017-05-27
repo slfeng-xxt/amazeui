@@ -1,5 +1,5 @@
 export default {
-  namespace: 'app',
+  namespace: 'count',
   state: 0,
   reducers: {
     add(count) { return count + 1; },

@@ -1,11 +1,11 @@
-import React from 'react'
-import { Link } from 'react-router'
-const Home = () => {
+import React from 'react';
+
+function Home() {
   return (
-    <div>Home
-      <Link to="/count">Count</Link>
+    <div>
+      Route Component: Home
     </div>
-  )
+  );
 }
 
 export default Home

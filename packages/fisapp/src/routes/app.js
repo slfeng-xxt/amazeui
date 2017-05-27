@@ -2,16 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from '../dva'
 
-function App ({ children, location, dispatch, app }) {
+const App = connect(({ count }) => ({
+  count,
+}))((props) => {
   return (
-    <div>{children}</div>
-  )
-}
-App.propTypes = {
-  children: PropTypes.element.isRequired,
-  location: PropTypes.object,
-  dispatch: PropTypes.func,
-  app: PropTypes.object,
-  loading: PropTypes.bool,
-}
+    <div>
+      <h2>{ props.count }</h2>
+      <button key="add" onClick={() => { props.dispatch({type: 'count/add' }); }}>+</button>
+      <button key="minus" onClick={() => { props.dispatch({type: 'count/minus' }); }}>-</button>
+    </div>
+  );
+});
+
 export default connect(({ app }) => ({ app }))(App)
