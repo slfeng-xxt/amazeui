@@ -1,0 +1,45 @@
+@import '../../../static/styles/public.less';
+@gray: #808080;
+.setBG(@url, @w, @h) {
+    background: url(@url) no-repeat;
+    width: @w;
+    height: @h;
+    background-size: 100% 100%;
+}
+
+.tip-wrap {
+    margin-top: 40px;
+    margin-bottom: 60px;
+    text-align: center;
+    .tip-img {
+        margin: 0 auto;
+        margin-bottom: 20px;
+    }
+    .tip-msg {
+        font-size: 28px;
+        color: @gray;
+        p {
+            margin-top: 10px;
+        }
+    }
+    &.novipcard {
+        .tip-img {
+            .setBG('../../../static/img/bear-novipcard.png', 180px, 180px);
+            [data-dpr='3'] & {
+                .setBG('../../../static/img/bear-novipcard3x.png', 270px, 270px);
+            }
+        }
+    }
+    &.nousercard {
+        .tip-img {
+            .setBG('../../../static/img/bear-nocard.png', 180px, 180px);
+            [data-dpr='3'] & {
+                .setBG('../../../static/img/bear-nocard3x.png', 270px, 270px);
+            }
+        }
+    }
+    &.nocitycard {
+        margin-top: 80px;
+        margin-bottom: 130px;
+    }
+}

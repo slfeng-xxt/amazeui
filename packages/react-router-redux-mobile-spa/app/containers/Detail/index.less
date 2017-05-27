@@ -1,0 +1,35 @@
+@import '../../../static/styles/public.less';
+@gray: #f6f6f6; // 提单页背景
+@red: #ff2d4b; // 外卖红
+@gray2: #a9a9a9;
+@black: #333;
+@white: #fff;
+@white2: #fffefe;
+.setBG(@url, @w, @h) {
+    background: url(@url) no-repeat;
+    width: @w;
+    height: @h;
+    background-size: 100% 100%;
+}
+
+.detail-page {
+    // background-color: @gray;
+    .titlebar-wrap {
+        margin: 0;
+        padding: 35px 0 35px 30px;
+        clear: left;
+    }
+    .access-wrap {
+        height: auto;
+        padding: 90px 0 45px 0;
+        font-size: 24px;
+        .access-item {
+            .info {
+                color: @red;
+                .num {
+                    font-size: 60px;
+                }
+            }
+        }
+    }
+}

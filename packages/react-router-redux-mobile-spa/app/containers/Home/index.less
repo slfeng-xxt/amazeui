@@ -1,0 +1,64 @@
+@import '../../../static/styles/public.less';
+@black: #333;
+@shallow-gray2: #a9a9a9; // 文字浅灰色（活动规则,tip,小度商城规则）
+.setBG(@url, @w, @h) {
+    background: url(@url) no-repeat;
+    width: @w;
+    height: @h;
+    background-size: 100% 100%;
+}
+
+.icon-before(@bg, @w, @h) {
+    &:before {
+        content: '';
+        display: block;
+        .setBG(@bg, @w, @h);
+        margin-right: 10px;
+    }
+}
+
+.to-rule {
+    font-size: 24px;
+    color: @shallow-gray2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .icon-before(@bg: '../../../static/img/i_rule.png', @w: 28px, @h: 28px);
+    [data-dpr=3]& {
+        .icon-before(@bg: '../../../static/img/i_rule3x.png', @w: 42px, @h: 42px)
+    }
+    margin: 30px 0;
+}
+
+// 支付成功弹框
+.pay-success-dialog {
+    width: auto;
+    .pay-success-img {
+        .setBG('../../../static/img/pay-success.png', 565px, 297px);
+        [data-dpr=3]& {
+            .setBG('../../../static/img/pay-success3x.png', 848px, 446px);
+        }
+    }
+    .pay-success-msg {
+        text-align: center;
+        margin: 20px 0;
+        color: @black;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 245px;
+    }
+    footer {
+        display: flex;
+        justify-content: center;
+        a {
+            display: block;
+            border: 1px solid @shallow-gray2; /*no*/
+            border-radius: 10px;
+            color: #808080;
+            width: 150px;
+            .v-height(58px);
+            text-align: center;
+        }
+    }
+}

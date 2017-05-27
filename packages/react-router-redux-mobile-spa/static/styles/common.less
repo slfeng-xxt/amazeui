@@ -1,0 +1,66 @@
+@import 'est/all.less';
+@import './public.less';
+@import './animate.less';
+.global-reset();
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    font-family: 'Microsoft YaHei', arial, helvetica, sans-serif;
+    // 安卓下面动画无法滚动 必须设置这个
+    .user-select(none);
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+}
+
+
+/*去除黑色阴影*/
+
+a,
+input {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+}
+
+//页面上的文字或者图片不被用户选择时候亦或者禁止长按保存图片
+a,
+img {
+    -webkit-touch-callout: none;
+    /* 禁止长按链接与图片弹出菜单 */
+}
+
+i {
+    font-style: normal;
+}
+
+a {
+    text-decoration: none;
+}
+
+input {
+    .reset-focus();
+}
+
+.item-transition-enter {
+    opacity: 0;
+    transition: all .3s ease-in;
+}
+
+.item-transition-enter.item-transition-enter-active {
+    opacity: 1;
+}
+// router转场动画效果
+.animate-slide-left-appear {
+  transform: translate(100%, 0);
+}
+.animate-slide-right-appear {
+  transform: translate(-100%, 0);
+}
+.animate-slide-left-appear.animate-slide-left-appear-active,
+.animate-slide-right-appear.animate-slide-right-appear-active {
+  transform: translate(0, 0);
+  transition: transform .2s ease-in;
+}

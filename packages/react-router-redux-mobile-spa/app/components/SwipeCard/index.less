@@ -1,0 +1,214 @@
+@import '../../../static/styles/public.less';
+@red: #ff2d4b; // 外卖红
+@white: #fff;
+@yellow: #ffac1c;
+@bg-gray: #b4b4b4;
+@bg-dark-gray: #828282;
+.setBG(@url, @w, @h) {
+    background: url(@url) no-repeat;
+    width: @w;
+    height: @h;
+    background-size: 100% 100%;
+}
+
+.icon-after(@bg, @w, @h) {
+    &:after {
+        content: '';
+        display: block;
+        .setBG(@bg, @w, @h);
+        margin-left: 10px;
+    }
+}
+
+.icon-before(@bg, @w, @h) {
+    &:before {
+        content: '';
+        display: block;
+        .setBG(@bg, @w, @h);
+        margin-right: 10px;
+    }
+}
+
+.swipe-wrap {
+    overflow: hidden;
+    height: 390px;
+    margin-left: 15px;
+}
+
+// card-item 公共样式
+.card-item {
+    font-size: 22px;
+    color: @white;
+    width: 620px; // 540px;
+    height: 350px; // 290px;
+    border-radius: 15px; // todo
+    display: flex;
+    margin: 40px 15px 0 15px;
+    float: left;
+    position: relative;
+    .inner-card {
+        width: 100%;
+        height: 100%;
+        padding: 30px 40px 30px 40px;
+        .section1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .city {
+                display: flex;
+                align-items: center;
+                .icon-before(@bg: '../../../static/img/i_location.png', @w: 15px, @h: 19px);
+                [data-dpr='3'] & {
+                    .icon-before('../../../static/img/i_location3x.png', 23px, 29px);
+                }
+            }
+            .to-use-detail {
+                display: flex;
+                align-items: center;
+                text-align: right;
+                font-size: 22px;
+                color: @white;
+                .icon-after(@bg: '../../../static/img/i_right_white.png', @w: 11px, @h: 20px);
+                [data-dpr='3'] & {
+                    .icon-after('../../../static/img/i_right_white3x.png', 15px, 26px);
+                }
+            }
+        }
+        .section2 {
+            .desc-wrap {
+                display: flex;
+                align-items: flex-end;
+                .discount {
+                    font-size: 200px;
+                    margin-right: 20px;
+                    margin-left: 10px;
+                    margin-bottom: -10px;
+                }
+                .discount-rule {
+                    .name {
+                        font-size: 40px;
+                        margin-bottom: 16px;
+                    }
+                    .desc {
+                        font-size: 26px;
+                        margin-bottom: 16px;
+                    }
+                }
+            }
+        }
+        .section3 {
+            .time-wrap {
+                vertical-align: bottom;
+                text-align: right;
+            }
+        }
+    }
+}
+
+.card-item {
+    // 只有一张卡
+    &.only-card {
+        width: 690px !important; // 610px;
+        margin: 0 auto;
+        margin-top: 40px;
+        float: none;
+    }
+
+    // 续费卡、过期卡、下架卡 布局
+    // 可续费、可删除卡 展示提示和按钮
+    &.renewCard,
+    &.expiredCard,
+    &.uselessCard {
+        .section2 {
+            height: 210px;
+            margin: 5px 0;
+            justify-content: space-between;
+            .desc-wrap {
+                display: flex;
+                align-items: flex-end;
+            }
+            .msg-tip {
+                position: absolute;
+                right: 0;
+                top: 210px;
+                .tip {
+                    .expired-in {
+                        color: @red;
+                        display: inline-block;
+                    }
+                    width: 160px;
+                    padding-right: 40px;
+                    .v-height(40px);
+                    background: @yellow;
+                    border-radius: 30px 0 0 30px;
+                    text-align: right;
+                }
+            }
+        }
+        .section3 {
+            .btn-wrap {
+                display: flex;
+                justify-content: flex-end;
+                .btn {
+                    .btn(@white);
+                    margin-top: -5px;
+                }
+            }
+        }
+    }
+    // 卡片背景 红色有效
+    &.validCard,
+    &.renewCard,
+    &.unenforcedCard {
+        .setBG('./img/bg-valid.png', 620px, 350px);
+        [data-dpr=3] & {
+            .setBG('./img/bg-valid3x.png', 1030px, 580px);
+        }
+        background-color: @red;
+    }
+    // 卡片背景 灰色无效
+    &.expiredCard,
+    &.uselessCard {
+        .setBG('./img/bg-expired.png', 620px, 350px);
+        [data-dpr=3] & {
+            .setBG('./img/bg-expired3x.png', 1030px, 580px);
+        }
+        background-color: @bg-gray;
+        .section2 {
+            .msg-tip .tip{
+                background-color: @bg-dark-gray;
+            }
+        }
+    }
+    // 特殊样式 调整不同卡型样式
+    // 未生效卡 展示起止时间
+    &.unenforcedCard {
+        .section2 {
+            margin: 18px 0;
+        }
+        .section3 {
+            .time-wrap {
+                line-height: 30px;
+                margin-top: -22px;
+            }
+        }
+    }
+    // 有效卡 展示截止时间
+    &.validCard {
+        .section2 {
+            margin: 24px 0;
+        }
+        .section3 {
+            .time-wrap {
+                margin-top: 20px;
+            }
+        }
+    }
+    // 不展示续费按钮卡 特殊样式
+    &.renewCard,
+    &.expiredCard {
+        .section2.nobtn {
+            margin-top: 16px;
+        }
+    }
+}

@@ -1,0 +1,56 @@
+@import '../../../static/styles/public.less';
+@gray: #f6f6f6; // 提单页背景
+@red: #ff2d4b; // 外卖红
+@font-gray2: #a9a9a9;
+@black: #333;
+@white2: #fffefe;
+
+.confirm-page {
+    background-color: @gray;
+    .buy-card {
+        width: 700px;
+        .v-height(90px);
+        text-align: center;
+        color: @white2;
+        font-size: 32px;
+        background-color: @red;
+        border-radius: 6px;
+        margin: 0 auto;
+        margin-top: 56px;
+    }
+    .city-tip-dialog {
+        .tipmsg-wrap {
+            padding: 20px 0 30px 0;
+            p {
+                color: @black;
+                text-align: center;
+                margin-bottom: 16px;
+                span {
+                    color: @red;
+                }
+            }
+        }
+        footer {
+            display: flex;
+            justify-content: center;
+            a {
+                display: block;
+                // anroid
+                border: 1px solid @font-gray2; /*no*/
+                // ios
+                [data-dpr=2]& {
+                    border: 2px solid @font-gray2;
+                }
+                [data-dpr=3]& {
+                    border: 2px solid @font-gray2;
+                }
+                border-radius: 10px;
+                color: @black;
+                width: 200px;
+                .v-height(80px);
+                text-align: center;
+                margin: 0 20px;
+            }
+        }
+    }
+}
