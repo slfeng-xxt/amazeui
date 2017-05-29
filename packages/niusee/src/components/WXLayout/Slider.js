@@ -16,7 +16,6 @@ const Slider = (props) => {
         newPoint: ev.newPoint,
         cancelled: ev.cancelled
       }
-      console.log(data);
       //this.setState({
       //  curCard: ev.newPoint
       //})

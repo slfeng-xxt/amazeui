@@ -19,21 +19,12 @@ const Routers = function ({ history, app }) {
       component: App,
       getIndexRoute (nextState, cb) {
         require.ensure([], require => {
-          registerModel(app, require('./models/home'))
-          cb(null, { component: require('./routes/home/') })
-        }, 'home')
+          registerModel(app, require('./models/weixin'))
+          cb(null, { component: require('./routes/weixin/') })
+        }, 'weixin')
       },
       childRoutes: [
         {
-          path: 'home',
-          name: 'home',
-          getComponent (nextState, cb) {
-            require.ensure([], require => {
-              registerModel(app, require('./models/home'))
-              cb(null, require('./routes/home/'))
-            }, 'home')
-          },
-        }, {
           path: 'weixin',
           name: 'weixin',
           getComponent (nextState, cb) {
@@ -41,6 +32,24 @@ const Routers = function ({ history, app }) {
               registerModel(app, require('./models/weixin'))
               cb(null, require('./routes/weixin/'))
             }, 'weixin')
+          },
+        }, {
+          path: 'myfollow',
+          name: 'myfollow',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/follow'))
+              cb(null, require('./routes/follow/'))
+            }, 'follow')
+          },
+        }, {
+          path: 'ucenter',
+          name: 'ucenter',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/ucenter'))
+              cb(null, require('./routes/ucenter/'))
+            }, 'ucenter')
           },
         }, {
           path: '*',

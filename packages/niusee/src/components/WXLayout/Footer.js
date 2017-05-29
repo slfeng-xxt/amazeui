@@ -1,20 +1,35 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'dva/router'
 
 const Footer = (props) => {
+  let {
+    curpath,
+  } = props
+
+  let menus = [
+    { name: '推荐', url: 'weixin' },
+    { name: '我的关注', url: 'myfollow' },
+    { name: '个人中心', url: 'ucenter' },
+  ]
+
+  let Menus = []
+  menus.map((item, index) => {
+    let activeClass = ''
+    if (curpath === item.url) {
+      activeClass = ' nav-bottom-active'
+    }
+    Menus.push(
+      <div className="col-xs-4" key={`footmenu-${index}`}>
+        <Link to={item.url}><p className={`nav-option${activeClass}`}>{item.name}</p></Link>
+      </div>
+    )
+  })
   return (
     <nav className="navbar navbar-default navbar-fixed-bottom">
       <div className="container">
         <div className="row text-center">
-          <div className="col-xs-4">
-            <a href="#"><p className="nav-option nav-bottom-active">推荐</p></a>
-          </div>
-          <div className="col-xs-4">
-            <a href="html/my-follow/index.html"><p className="nav-option">我的关注</p></a>
-          </div>
-          <div className="col-xs-4">
-            <a href="html/user/index.html"><p className="nav-option">个人中心</p></a>
-          </div>
+        {Menus}
         </div>
       </div>
     </nav>

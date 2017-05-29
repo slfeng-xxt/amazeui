@@ -3,28 +3,13 @@ import PropTypes from 'prop-types'
 import { connect } from 'dva'
 
 import { Helmet } from 'react-helmet' // 可复用head
-import { Header, Slider, List, Footer } from '../../components/WXLayout'
+import { Header, List, Footer } from '../../components/WXLayout'
 
-function Weixin({ location, dispatch, weixin, loading }) {
+function Follow({ location, dispatch, follow, loading }) {
   let {
     curpath,
-    card,
-    cate,
-  } = weixin
+  } = follow
 
-  const headProps = {
-    cate,
-    changeCate: function(e) {
-      let target = e.target
-      let cate = target.getAttribute('data-cate')
-      dispatch({
-        type: 'weixin/changeCate',
-        payload: {
-          cate,
-        }
-      })
-    }
-  }
   return (
     <div className="content">
       <Helmet>
@@ -33,8 +18,7 @@ function Weixin({ location, dispatch, weixin, loading }) {
         <meta name="renderer" content="webkit" />
         <meta charset="utf-8" />
       </Helmet>
-      <Header {...headProps} />
-      <Slider card={card} />
+      <Header />
       <List />
       <Footer curpath={curpath} />
     </div>
@@ -42,5 +26,5 @@ function Weixin({ location, dispatch, weixin, loading }) {
 }
 
 export default connect(
-  ({ weixin, loading }) => ({ weixin, loading: loading.models.weixin })
-)(Weixin)
+  ({ follow, loading }) => ({ follow, loading: loading.models.follow })
+)(Follow)
