@@ -1,6 +1,8 @@
 export default {
   namespace: 'app',
   state: {},
-  reducers: {
+  reducers: {},
+  effects: {},
+  subscriptions: {
   },
 }

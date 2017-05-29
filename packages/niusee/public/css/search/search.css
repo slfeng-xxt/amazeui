@@ -1,0 +1,16 @@
+@charset "utf-8";
+body{padding-top: 0px;}
+.search-frame{background-color: #fff;padding: 5px 15px;margin-bottom: 10px}
+#search-input{padding-left: 30px;padding-right: 50px}
+.search-frame .glyphicon-search{position: absolute;left: 15px;top: 10px;color: #ddd}
+.search-frame .glyphicon-remove{position: absolute;right: 15px;top: 10px;color: #666}
+
+.search-btn{line-height: 34px;color: red}
+
+.contert-main-title{border-bottom: 1px solid #ddd;padding-bottom: 10px}
+.contert-main-title span{color: #666}
+.contert-main{margin-bottom: 10px}
+.attention-btn{display: inline-block;width: 65px;text-align: center;}
+.attention-btn .glyphicon-heart{display: block;}
+/* 已关注样式 */
+.attention-btn-active{color: red}

@@ -1,17 +1,22 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { connect } from '../dva'
+import { Link } from 'react-router'
 
-const App = connect(({ count }) => ({
-  count,
-}))((props) => {
+function App ({ children, location, dispatch, app }) {
   return (
     <div>
-      <h2>{ props.count }</h2>
-      <button key="add" onClick={() => { props.dispatch({type: 'count/add' }); }}>+</button>
-      <button key="minus" onClick={() => { props.dispatch({type: 'count/minus' }); }}>-</button>
+      <div>
+        <Link to="/home">Home</Link>
+        <Link to="/count">Count</Link>
+      </div>
+      <div>{children}</div>
     </div>
-  );
-});
+  )
+}
 
-export default connect(({ app }) => ({ app }))(App)
+App.propTypes = {
+
+}
+export default connect(
+  ({ app }) => ({ app })
+)(App)

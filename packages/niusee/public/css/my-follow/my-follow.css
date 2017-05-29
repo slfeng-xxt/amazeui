@@ -1,0 +1,14 @@
+@charset "utf-8";
+
+body{padding-top: 0px;}
+.maybe-title{padding: 0 15px;margin: 5px 0;}
+.myfollow-nav{background-color: #fbfbfb;padding: 0 15px;}
+.myfollow-nav li{line-height: 38px;border-bottom: 2px solid #fff;float: left;padding: 0 5px}
+.myfollow-nav li.active{border-bottom: 2px solid red}
+
+.attention-btn-more{width: 20px}
+.contert-main .myfollow-nav{padding: 0}
+
+.swiper-container{height: 38px;line-height: 38px}
+.swiper-slide{width: auto;padding: 0 10px;border-bottom: 2px solid #fff;}
+.slide-active{border-bottom: 2px solid red}

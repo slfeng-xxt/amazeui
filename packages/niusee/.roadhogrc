@@ -1,0 +1,27 @@
+{
+  "entry": "src/index.js",
+  "publicPath": "/dist/",
+  "outputPath": "./dist",
+  "env": {
+    "development": {
+      "extraBabelPlugins": [
+        "dva-hmr",
+        "transform-runtime"
+      ]
+    },
+    "production": {
+      "extraBabelPlugins": [
+        "transform-runtime",
+        ["import", { "libraryName": "antd", "style": "css" }]
+      ]
+    }
+  },
+  "proxy": {
+    "/api": {
+      //"target": "http://domain.com/api",
+      "target": "http://192.168.200.30:8099/api",
+      "changeOrigin": true,
+      "pathRewrite": { "^/api" : "" }
+    }
+  }
+}

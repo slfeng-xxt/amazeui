@@ -1,6 +1,6 @@
 import React from 'react';
-
-function Home() {
+import { connect } from '../../dva'
+function Home(props) {
   return (
     <div>
       Route Component: Home
@@ -9,3 +9,7 @@ function Home() {
 }
 
 export default Home
+
+export default connect(
+  ({ home }) => ({ home })
+)(Home)
