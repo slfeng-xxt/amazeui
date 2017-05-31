@@ -1,10 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-
+import Slider from 'react-slick'
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
+import "./slick-override.less"
 import { Helmet } from 'react-helmet' // 可复用head
-import { Header, Slider, List, Footer } from '../../components/WXLayout'
+import { Header, List, Footer } from '../../components/WXLayout'
 
+import styles from './index.less'
 function Weixin({ location, dispatch, weixin, loading }) {
   let {
     curpath,
@@ -25,6 +29,17 @@ function Weixin({ location, dispatch, weixin, loading }) {
       })
     }
   }
+
+  const slideSettings = {
+    arrows: false,
+    autoplay: true,
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1
+  }
+
   return (
     <div className="content">
       <Helmet>
@@ -34,18 +49,11 @@ function Weixin({ location, dispatch, weixin, loading }) {
         <meta charset="utf-8" />
       </Helmet>
       <Header {...headProps} />
-      <div className="swiper-container">
-        <div className="swiper-wrapper">
-          <div className="swiper-slide">Slide 1</div>
-          <div className="swiper-slide">Slide 2</div>
-          <div className="swiper-slide">Slide 3</div>
-        </div>
-        <div className="swiper-pagination swiper-pagination-bullets">
-          <span className="swiper-pagination-bullet"></span>
-          <span className="swiper-pagination-bullet"></span>
-          <span className="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
-        </div>
-      </div>
+      <Slider {...slideSettings}>
+        <div><h3>Slider 1</h3></div>
+        <div><h3>Slider 2</h3></div>
+        <div><h3>Slider 3</h3></div>
+      </Slider>
       <List />
       <Footer curpath={curpath} />
     </div>
