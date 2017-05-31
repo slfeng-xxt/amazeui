@@ -52,6 +52,60 @@ const Routers = function ({ history, app }) {
             }, 'ucenter')
           },
         }, {
+          path: 'profile',
+          name: 'profile',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/profile'))
+              cb(null, require('./routes/ucenter/profile'))
+            }, 'profile')
+          },
+        }, {
+          path: 'history',
+          name: 'history',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/history'))
+              cb(null, require('./routes/ucenter/history'))
+            }, 'history')
+          },
+        }, {
+          path: 'favorite',
+          name: 'favorite',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/favorite'))
+              cb(null, require('./routes/ucenter/favorite'))
+            }, 'favorite')
+          },
+        }, {
+          path: 'income',
+          name: 'income',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/income'))
+              cb(null, require('./routes/ucenter/income'))
+            }, 'income')
+          },
+        }, {
+          path: 'expenditure',
+          name: 'expenditure',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/expenditure'))
+              cb(null, require('./routes/ucenter/expenditure'))
+            }, 'expenditure')
+          },
+        }, {
+          path: 'search',
+          name: 'search',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/search'))
+              cb(null, require('./routes/search/'))
+            }, 'search')
+          },
+        }, {
           path: '*',
           name: 'error',
           getComponent (nextState, cb) {

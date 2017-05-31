@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-
+import { Link } from 'dva/router'
 import { Helmet } from 'react-helmet' // 可复用head
 import { Header, List, Footer } from '../../components/WXLayout'
 
@@ -11,7 +11,7 @@ function Ucenter({ location, dispatch, ucenter, loading }) {
   } = ucenter
 
   return (
-    <div classNameName="content">
+    <div className="content">
       <Helmet>
         <title>牛视科技公众号 -- niusee.cn</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
@@ -33,9 +33,9 @@ function Ucenter({ location, dispatch, ucenter, loading }) {
               </div>
             </div>
             <div className="col-xs-1 text-left">
-              <a href="personalInformation.html"><div className="user-head-right">
+              <Link to="/profile"><div className="user-head-right">
                 <i className="glyphicon glyphicon-menu-right"></i>
-              </div></a>
+              </div></Link>
             </div>
           </div>
         </div>
@@ -43,7 +43,7 @@ function Ucenter({ location, dispatch, ucenter, loading }) {
 
       <div className="user-nav">
         <div className="container">
-          <a href="viewing-record.html"><div className="row user-nav-list">
+          <Link to="/history"><div className="row user-nav-list">
             <div className="col-xs-11">
               我的观看记录
             </div>
@@ -52,8 +52,8 @@ function Ucenter({ location, dispatch, ucenter, loading }) {
                 <i className="glyphicon glyphicon-menu-right"></i>
               </div>
             </div>
-          </div></a>
-          <a href="my-collection.html"><div className="row user-nav-list user-nav-last">
+          </div></Link>
+          <Link to="favorite"><div className="row user-nav-list user-nav-last">
             <div className="col-xs-11">
               我的收藏
             </div>
@@ -62,13 +62,13 @@ function Ucenter({ location, dispatch, ucenter, loading }) {
                 <i className="glyphicon glyphicon-menu-right"></i>
               </div>
             </div>
-          </div></a>
+          </div></Link>
         </div>
       </div>
 
       <div className="user-nav">
         <div className="container">
-          <a href="my-expenditure.html"><div className="row user-nav-list">
+          <Link to="/expenditure"><div className="row user-nav-list">
             <div className="col-xs-11">
               我的支出
             </div>
@@ -77,8 +77,8 @@ function Ucenter({ location, dispatch, ucenter, loading }) {
                 <i className="glyphicon glyphicon-menu-right"></i>
               </div>
             </div>
-          </div></a>
-          <a href="my-income.html"><div className="row user-nav-list user-nav-last">
+          </div></Link>
+          <Link to="/income"><div className="row user-nav-list user-nav-last">
             <div className="col-xs-11">
               我的收益
             </div>
@@ -87,7 +87,7 @@ function Ucenter({ location, dispatch, ucenter, loading }) {
                 <i className="glyphicon glyphicon-menu-right"></i>
               </div>
             </div>
-          </div></a>
+          </div></Link>
         </div>
       </div>
 

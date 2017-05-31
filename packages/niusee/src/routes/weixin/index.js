@@ -34,7 +34,18 @@ function Weixin({ location, dispatch, weixin, loading }) {
         <meta charset="utf-8" />
       </Helmet>
       <Header {...headProps} />
-      <Slider card={card} />
+      <div className="swiper-container">
+        <div className="swiper-wrapper">
+          <div className="swiper-slide">Slide 1</div>
+          <div className="swiper-slide">Slide 2</div>
+          <div className="swiper-slide">Slide 3</div>
+        </div>
+        <div className="swiper-pagination swiper-pagination-bullets">
+          <span className="swiper-pagination-bullet"></span>
+          <span className="swiper-pagination-bullet"></span>
+          <span className="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
+        </div>
+      </div>
       <List />
       <Footer curpath={curpath} />
     </div>

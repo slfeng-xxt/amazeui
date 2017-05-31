@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'dva/router'
 
 import styles from './index.less'
 const Header = (props) => {
@@ -34,7 +35,7 @@ const Header = (props) => {
         <div className="row text-center">
           {Menus}
           <div className="col-xs-2 nav-option">
-            <a href="html/search/index.html"><span className="glyphicon glyphicon-search" aria-hidden="true"></span></a>
+            <Link to="/search"><span className="glyphicon glyphicon-search" aria-hidden="true"></span></Link>
           </div>
         </div>
       </div>
