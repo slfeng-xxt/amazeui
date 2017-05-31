@@ -1,19 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import Slider from 'react-slick'
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
-import "./slick-override.less"
 import { Helmet } from 'react-helmet' // 可复用head
-import { Header, List, Footer } from '../../components/WXLayout'
+import { Header, List, Slider, Footer } from '../../components/WXLayout'
 
 import styles from './index.less'
 function Weixin({ location, dispatch, weixin, loading }) {
   let {
     curpath,
-    card,
+    cards,
     cate,
+    list,
   } = weixin
 
   const headProps = {
@@ -30,16 +27,7 @@ function Weixin({ location, dispatch, weixin, loading }) {
     }
   }
 
-  const slideSettings = {
-    arrows: false,
-    autoplay: true,
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1
-  }
-
+  let slides = []
   return (
     <div className="content">
       <Helmet>
@@ -49,12 +37,8 @@ function Weixin({ location, dispatch, weixin, loading }) {
         <meta charset="utf-8" />
       </Helmet>
       <Header {...headProps} />
-      <Slider {...slideSettings}>
-        <div><h3>Slider 1</h3></div>
-        <div><h3>Slider 2</h3></div>
-        <div><h3>Slider 3</h3></div>
-      </Slider>
-      <List />
+      <Slider cards={cards} />
+      <List datas={list} />
       <Footer curpath={curpath} />
     </div>
   )

@@ -2,7 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './Slider.less'
 
-class Slider extends React.Component {
+import Slider from 'react-slick'
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
+import "./slick-override.less"
+
+class MySlider extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -15,29 +20,30 @@ class Slider extends React.Component {
   }
 
   render() {
-    let cards = [
-      { content: 'Slide 1', },
-      { content: 'Slide 2', },
-      { content: 'Slide 3', },
-    ]
+    const slideSettings = {
+      arrows: false,
+      autoplay: true,
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1
+    }
 
-    let slideItems = []
-    let slidePG = []
-    
-    return (
-      <div className="swiper-container">
-        <div className="swiper-wrapper">
-          <div className="swiper-slide">Slide 1</div>
-          <div className="swiper-slide">Slide 2</div>
-          <div className="swiper-slide">Slide 3</div>
-        </div>
-        <div className={styles.pg}>
-          <span className={styles.active}></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-    )
+    let {
+      cards,
+    } = this.props
+
+    let cardItems = []
+    cards.map((item, index) => {
+      cardItems.push(
+        <div key={`gallery_${index}`}><h3>{item.content}</h3></div>
+      )
+    })
+    return cards.length > 0 ?
+      (<Slider {...slideSettings}>
+        {cardItems}
+      </Slider>) : (<div></div>)
   }
 }
-export default Slider
+export default MySlider
