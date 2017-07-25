@@ -1,0 +1,31 @@
+module.exports = {
+    "extends": "airbnb",
+    "plugins": [
+        "react",
+        "jsx-a11y",
+        "import"
+    ],
+    "rules": {
+    "spaced-comment": [0],
+    "no-unused-vars": [0],
+    "no-empty": [0],
+    "react/wrap-multilines": [0],
+    "react/no-multi-comp": [0],
+    "no-constant-condition": [0],
+    "react/jsx-no-bind": [0],
+    "react/prop-types": [0],
+    "arrow-body-style": [0],
+    "react/prefer-stateless-function": [0],
+    "semi": [0],
+    "global-require": [0],
+    "no-shadow": [0],
+    "no-useless-computed-key": [0],
+    "no-underscore-dangle": [0],
+    "no-empty-function": [0],
+    "comma-dangle":[0],
+    "react/forbid-prop-types": [0],
+    "import/no-unresolved": [0],
+    "no-plusplus": [0],
+    "max-len": [0]
+  }
+};

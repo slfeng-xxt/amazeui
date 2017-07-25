@@ -1,0 +1,5 @@
+src/**/*-test.js
+mock/
+dist/
+proxy.config.js
+webpack.config.js
